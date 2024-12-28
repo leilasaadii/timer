@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رمز پویا و تایمر</title>
+      <style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
+    
+    .container {
+        text-align: center;
+    }
+    
+    .box {
+        background-color: #4CAF50;
+        color: white;
+        padding: 20px 40px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .pass, .timer {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+</style>    
+</head>
+<body>
+    <div class="container">
+        <div id="box" class="box">کلیک کنید</div>
+        <div id="pass" class="pass">رمز پویا: </div>
+        <div id="timer" class="timer">زمان: 00:00</div>
+    </div>
+    <script>
+    var box = document.getElementById("box");
+    var pass = document.getElementById("pass");
+    var timerDisplay = document.getElementById("timer");
+    var timer;
+    var countdown = 120; 
+    var isPassGenerated = false; 
+//   تابع برای تولید رمز پویا 6 رقمی
+function generatePass() {
+    var passValue = Math.floor(100000 + Math.random() * 900000);
+    pass.textContent = "رمز پویا: " + passValue; 
+    isPassGenerated = true; 
+}
+// تابع برای شروع تایمر
+function startTimer() {
+    if (timer) {
+        clearInterval(timer);
+    }
+    countdown = 120; 
+    updateTimerDisplay();
+    timer = setInterval(function() {
+        countdown--; 
+        updateTimerDisplay();
+        if (countdown <= 0) {
+            clearInterval(timer);
+            pass.textContent = "رمز منقضی شده است";
+            timerDisplay.textContent = "زمان: 00:00";
+            isPassGenerated = false;
+        }
+    }, 1000);
+}
+// تابع برای به‌روزرسانی نمایش زمان تایمر
+function updateTimerDisplay() {
+      var minutes = Math.floor(countdown / 60);
+     var seconds = countdown % 60; 
+    timerDisplay.textContent = "زمان: " + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+}
+// اضافه کردن رویداد کلیک به باکس
+box.addEventListener("click", function() {
+    if (!isPassGenerated || countdown <= 0) { 
+        generatePass();
+        startTimer();
+    } else {
+        alert("رمز قبلی هنوز معتبر است. لطفاً منتظر پایان تایمر بمانید.");
+    }
+});
+    </script>
+</body>
+</html>
